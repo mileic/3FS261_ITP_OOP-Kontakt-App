@@ -1,6 +1,6 @@
+import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
