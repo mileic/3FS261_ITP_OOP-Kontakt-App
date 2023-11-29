@@ -28,11 +28,4 @@ public class Contacts {
     public String getPhoneNumber() {
         return phoneNumber;
     }
-
-    public List<Contacts> createDataList() {
-        return List.of(
-            new Contacts(1,  "Michael", "Leichtl", "Null"),
-            new Contacts(2,  "Max", "Schwaderer", "Null")
-        );
-    }
 }

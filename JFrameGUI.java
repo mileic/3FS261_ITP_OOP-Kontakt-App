@@ -1,12 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class JFrameGUI {
@@ -20,31 +15,39 @@ public class JFrameGUI {
         
         // filling table with content
         for (Contacts obj : data) {
-            Contacts[] rowData = {obj.getId(), obj.getGivenName(), obj.getSurname(), obj.getPhoneNumber()};
+            Object[] rowData = {obj.getId(), obj.getGivenName(), obj.getSurname(), obj.getPhoneNumber()};
             tableModel.addRow(rowData);
         }
         
-        // create table and scroll pane
+        // create table, panel and scroll pane
         JTable table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
+        JPanel panel = new JPanel(new GridLayout(1, 1));
 
         // panel settings
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-        scrollPane.setLayout(new GridLayout(0, 1));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        panel.add(scrollPane);
 
         // frame (window) settings
-        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.add(panel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Contacts");
         frame.pack();
         frame.setVisible(true);
-
     }
     public static void main(String[] args) {
         List<Contacts> dataList = createDataList();
         
+        // build application
         SwingUtilities.invokeLater(() -> {
             new JFrameGUI(dataList);
         });
+    }
+
+    public static List<Contacts> createDataList() {
+        return List.of(
+            new Contacts(1,  "Michael", "Leichtl", "Null"),
+            new Contacts(2,  "Max", "Schwaderer", "Null")
+        );
     }
 }
