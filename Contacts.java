@@ -1,4 +1,6 @@
-public class Contacts extends ContactList {
+import java.util.List;
+
+public class Contacts {
 
     private int id;
     private String givenName;
@@ -6,7 +8,7 @@ public class Contacts extends ContactList {
     private String phoneNumber;
     
     // constructor class
-    public Contacts(int id, String givenName, String surname, String phoneNumber){
+    public Contacts(int id, String givenName, String surname, String phoneNumber) {
         this.id = id;
         this.givenName = givenName;
         this.surname = surname;
@@ -14,30 +16,23 @@ public class Contacts extends ContactList {
     }
 
     // get methods
-    public int getId(){
+    public int getId() {
         return id;
     }
-    public String getGivenName(){
+    public String getGivenName() {
         return givenName;
     }
-    public String getSurname(){
+    public String getSurname() {
         return surname;
     }
-    public String getPhoneNumber(){
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    // set methods
-    public void setId(int newId) {
-        this.id = newId;
-    }
-    public void setGivenName(String newGivenName) {
-        this.givenName = newGivenName;
-    }
-    public void setSurname(String newSurname) {
-        this.surname = newSurname;
-    }
-    public void setPhoneNumber(String newPhoneNumber) {
-        this.phoneNumber = newPhoneNumber;
+    public List<Contacts> createDataList() {
+        return List.of(
+            new Contacts(1,  "Michael", "Leichtl", "Null"),
+            new Contacts(2,  "Max", "Schwaderer", "Null")
+        );
     }
 }
