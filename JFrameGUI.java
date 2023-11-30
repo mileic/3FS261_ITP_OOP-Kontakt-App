@@ -33,10 +33,11 @@ public class JFrameGUI {
         // create table, panel and scroll pane
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
-        panel = new JPanel(new GridLayout(1, 1));
+        panel = new JPanel(new GridLayout(2, 1));
 
         // create search text field
         searchField = new JTextField();
+        searchField.setColumns(1);
         // handle event listener
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override // instruct compiler to override method in superclass
@@ -52,7 +53,7 @@ public class JFrameGUI {
                 filterTable();
             }
         });
-        
+
         // panel settings
         panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
         // add components to panel        
@@ -71,10 +72,12 @@ public class JFrameGUI {
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
 
-        String textInput = searchField.getText();
+        String textInput = searchField.getText(); // extract text from textfield into var
+        // condition set to input being not null
         if (textInput.trim().length() == 0) {
             sorter.setRowFilter(null);
         } else {
+            // set filter for all rows
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + textInput));
         }
     }
