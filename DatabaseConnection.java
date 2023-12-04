@@ -1,35 +1,25 @@
-import java.beans.Statement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseConnection {
     public static void main(String[] args) {
-        
-        // declare veriables 
-        String url = "jdbc:mysql://localhost:3306/databasecontacts";
+        String url = "jbdc:mysql://localhost:3306/databasecontacts";
         String username = "root";
-        String password = "Sportartikel-123";
-        Connection connection = null; 
+        String password = "Sportartikel-123"; 
 
         try {
-           // try to connect
-            System.out.println("Connecting database...");
-            connection = DriverManager.getConnection(url, username, password);
-            System.out.println("Database connected!");
-            
-        } catch (SQLException e) {
-            System.out.println("Cannot connect the database!");
-            e.printStackTrace();
-        } finally {
-            // close connection
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ignore) {
-                
-                }
+            Class.forName("com.mysql.cj.jbdc.Driver");
+            Connection con = DriverManager.getConnection(url, username, password);
+            Statement statement = con.createStatement(); 
+
+            ResultSet resultSet = statement.executeQuery("select * from contacts"); 
+
+            while(resultSet.next()) {
+                System.out.println(resultSet.getInt(1)+" "+resultSet.getString(2)+resultSet.getString(3)+resultSet.getString(4));
             }
+
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
         }
-    }
+    } 
 }
