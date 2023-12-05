@@ -33,7 +33,8 @@ public class JFrameGUI {
         // create table, panel and scroll pane
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
-        panel = new JPanel(new GridLayout(2, 1));
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
         // create search text field
         searchField = new JTextField();
@@ -56,9 +57,10 @@ public class JFrameGUI {
 
         // panel settings
         panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-        // add components to panel        
+        
+        // add components to panel
         panel.add(searchField, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(scrollPane, BorderLayout.SOUTH);
 
         // frame (window) settings
         frame.add(panel, BorderLayout.CENTER);
