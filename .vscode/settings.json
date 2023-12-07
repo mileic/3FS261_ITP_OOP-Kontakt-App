@@ -1,5 +1,8 @@
 {
     "java.debug.settings.onBuildFailureProceed": true,
+    "java.project.referencedLibraries": [
+        "lib/mysql-connector-java-8.0.25.jar"
+    ],
     "sqltools.connections": [
         {
             "mysqlOptions": {
@@ -12,8 +15,8 @@
             "driver": "MySQL",
             "name": "DatabaseConnection",
             "username": "root",
-            "database": "DatabaseContacts",
-            "password": "Sportartikel-123"
+            "database": "ContactsDB",
+            "password": "K1nG$m3N*"
         }
     ]
 }
