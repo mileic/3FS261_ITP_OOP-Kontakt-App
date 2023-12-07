@@ -3,22 +3,19 @@ import java.sql.*;
 public class DatabaseConnection {
     public static void main(String[] args) {
         // declare and initiate variables
-        String url = "jbdc:mysql://localhost:3306/databasecontacts";
+        String url = "jbdc:mysql://localhost:3306/ContactsDB";
         String username = "root";
-        String password = "Sportartikel-123"; 
+        String password = "K1nG$m3n*"; 
+        String databaseName = "ContactsDB";
 
         try {
             // try to connect to database with JBDC driver. 
-            Class.forName("com.mysql.cj.jbdc.Driver");
+            // Class.forName("com.mysql.cj.jbdc.Driver");
             Connection con = DriverManager.getConnection(url, username, password);
+            String sql = "USE DATABASE" + databaseName;
 
             Statement statement = con.createStatement(); 
-            ResultSet resultSet = statement.executeQuery("select * from contacts"); 
-
-            
-            while(resultSet.next()) {
-                System.out.println(resultSet.getInt(1)+" "+resultSet.getString(2)+resultSet.getString(3)+resultSet.getString(4));
-            }
+            statement.executeUpdate(sql);
 
             // close connection to database 
             con.close();
