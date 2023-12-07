@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "JFrameGUI",
+            "request": "launch",
+            "mainClass": "JFrameGUI",
+            "projectName": "ITP---OOP-mit-Java_765f5c9e"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
