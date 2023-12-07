@@ -6,10 +6,9 @@ public class DBConnection {
     public static Connection dbConnection() {
         // declare and initiate variables
         String driver = "com.mysql.cj.jdbc.Driver";
-        String databaseName = "ContactsDB";
-        String url = "jbdc:mysql://localhost:3306/" + databaseName;
+        String url = "jdbc:mysql://localhost:3306/ContactsDB";
         String username = "root";
-        String password = "K1nG$m3n*";
+        String password = "K1nG$m3N*";
 
         try {
             // try to connect to database with JBDC driver. 
