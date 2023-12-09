@@ -1,5 +1,5 @@
 public class Contacts {
-
+    // initiate variables
     private int id;
     private String givenName;
     private String surname;

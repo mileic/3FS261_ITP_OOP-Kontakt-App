@@ -1,42 +1,46 @@
 import java.sql.*;
+import java.util.Properties;
 import java.awt.EventQueue;
 import javax.swing.JOptionPane;
 
 public class DBConnection {
     public static Connection dbConnection() {
-        // declare and initiate variables
-        String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/ContactsDB";
-        String username = "root";
-        String password = "K1nG$m3N*";
+        // ensure conn is null
+        Connection dbConn = null;
 
         try {
+            // declare variables
+            String url = "jdbc:mysql://localhost:3306/ContactsDB";
+            Properties dbProp = new Properties();
+            dbProp.put("user", "root");
+            dbProp.put("password", "K1nG$m3N*");
+
             // try to connect to database with JBDC driver. 
-            // Class.forName("com.mysql.cj.jbdc.Driver");
-            Class.forName(driver);
-            Connection conn = DriverManager.getConnection(url, username, password);
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            dbConn = DriverManager.getConnection(url, dbProp);
 
-            // show status
-            JOptionPane.showMessageDialog(null, "Connected to the database");
+            if (dbConn != null) {
+                // show success status
+                JOptionPane.showMessageDialog(null, "Connected to the database.");
+            }
+            // return connection obj
+            return dbConn;
+        } catch (Exception ex) {
+            // print failure status
+            System.out.println(ex);
 
-            // return connection
-            return conn;
-        } catch (Exception e) {
-            // connection not sucessful -> print error
-            System.out.println(e);
-
-            JOptionPane.showMessageDialog(null, "Could not connect to the database...");
+            String errOut = "Connection to database failed.\n\n" + ex;
+            // show failure status
+            JOptionPane.showMessageDialog(null, errOut);
+            
             return null;
         }
     }
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    DBConnection.dbConnection();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                // init connection
+                DBConnection.dbConnection();
             }
         });
     }
