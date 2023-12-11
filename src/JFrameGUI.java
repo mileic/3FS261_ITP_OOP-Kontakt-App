@@ -132,11 +132,11 @@ public class JFrameGui {
             System.exit(0);
         } else {
             // exec function build list from objects
-            List<Contacts> dataList = createDataList();
+            List<Contacts> dataList = AlterDbData.;
 
             // build application
             SwingUtilities.invokeLater(() -> {
-                new JFrameGui(dataList);
+                new JFrameGui();
             });
         }
     }

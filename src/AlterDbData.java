@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlterDbData {
-    public static List<Contacts> getAllContactsFromDatabase() {
+    public static List<Contacts> getAllContactsFromDb() {
         // init array
         List<Contacts> contactsList = new ArrayList<>();
         
