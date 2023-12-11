@@ -1,8 +1,8 @@
 // import modules & librarys
 import javax.swing.table.DefaultTableModel;
 
-public class CustomTableModel extends DefaultTableModel {
-    public CustomTableModel(Object[] columnNames, int rowCount) {
+public class NonEditableIdTableModel extends DefaultTableModel {
+    public NonEditableIdTableModel(Object[] columnNames, int rowCount) {
         super(columnNames, rowCount);
     }
 

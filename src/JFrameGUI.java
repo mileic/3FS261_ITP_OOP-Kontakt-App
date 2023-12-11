@@ -7,22 +7,22 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-public class JFrameGUI {
+public class JFrameGui {
     // initialize vars
     private JFrame frame;
     private JPanel panel;
     private JTable table;
     private JTextField searchField;
     private JScrollPane scrollPane;
-    private CustomTableModel tableModel;
+    private NonEditableIdTableModel tableModel;
 
-    public JFrameGUI(List<Contacts> data) {
+    public JFrameGui(List<Contacts> data) {
         // create frame
         frame = new JFrame();
 
         // configure table model
         String[] columnNames = {"ID", "Name", "Surname", "Phone Number"};
-        tableModel = new CustomTableModel(columnNames, 0);
+        tableModel = new NonEditableIdTableModel(columnNames, 0);
         
         // filling table with content from objects
         for (Contacts obj : data) {
@@ -69,7 +69,7 @@ public class JFrameGUI {
         panel.add(searchField, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(saveButton, BorderLayout.EAST);
-        panel.add(addRowButton, BorderLayout.WEST);
+        panel.add(addRowButton, BorderLayout.EAST);
 
         // frame (window) settings
         frame.add(panel, BorderLayout.CENTER);
@@ -104,7 +104,7 @@ public class JFrameGUI {
             String phoneNumber = (String) table.getValueAt(i, 3);
     
             // query database
-            AlterDatabase.updateContact(id, givenName, surname, phoneNumber);
+            AlterDbData.updateContact(id, givenName, surname, phoneNumber);
         }
     }
 
@@ -119,7 +119,7 @@ public class JFrameGUI {
         // add default values to the array
         newRowData[0] = rowCount + 1; 
         for (int i = 1; i < columnCount; i++) {
-            newRowData[i] = "New Value";
+            newRowData[i] = "Null";
         }
 
         // add the new row to the table model
@@ -128,7 +128,7 @@ public class JFrameGUI {
 
     public static void main(String[] args) {
         // setting up db connection
-        if (DatabaseSetup.dbConnection() == null) {
+        if (DbSetup.dbConnection() == null) {
             System.exit(0);
         } else {
             // exec function build list from objects
@@ -136,7 +136,7 @@ public class JFrameGUI {
 
             // build application
             SwingUtilities.invokeLater(() -> {
-                new JFrameGUI(dataList);
+                new JFrameGui(dataList);
             });
         }
     }
