@@ -68,8 +68,8 @@ public class JFrameGui {
         // add components to panel
         panel.add(searchField, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(saveButton, BorderLayout.EAST);
-        panel.add(addRowButton, BorderLayout.EAST);
+        panel.add(saveButton, BorderLayout.SOUTH);
+        panel.add(addRowButton, BorderLayout.SOUTH);
 
         // frame (window) settings
         frame.add(panel, BorderLayout.CENTER);
