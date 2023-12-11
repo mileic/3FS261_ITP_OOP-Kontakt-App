@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableRowSorter;
 import java.sql.*;
 
@@ -98,6 +99,15 @@ public class JFrameGui {
     }
 
     private void saveChangesToDatabase() {
+        // stop cell editing to ensure changes are committed
+        if (table.isEditing()) {
+            // get cell editor state
+            TableCellEditor cellEditor = table.getCellEditor();
+            if (cellEditor != null) {
+                cellEditor.stopCellEditing(); // stop cell editing
+            }
+        }
+
         // count rows
         int rowCount = table.getRowCount();
         // save each row
