@@ -14,7 +14,7 @@ public class JFrameGUI {
     private JTable table;
     private JTextField searchField;
     private JScrollPane scrollPane;
-    private DefaultTableModel tableModel;
+    private CustomTableModel tableModel;
 
     public JFrameGUI(List<Contacts> data) {
         // create frame
@@ -22,7 +22,7 @@ public class JFrameGUI {
 
         // configure table model
         String[] columnNames = {"ID", "Name", "Surname", "Phone Number"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new CustomTableModel(columnNames, 0);
         
         // filling table with content from objects
         for (Contacts obj : data) {
@@ -55,12 +55,21 @@ public class JFrameGUI {
             }
         });
 
+        // create save & add new row button
+        JButton saveButton = new JButton("Save");
+        JButton addRowButton = new JButton("Add New Row");
+        // handle event listener
+        saveButton.addActionListener(e -> saveChangesToDatabase());
+        addRowButton.addActionListener(e -> addNewRow());
+
         // panel settings
         panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
         
         // add components to panel
         panel.add(searchField, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.SOUTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(saveButton, BorderLayout.EAST);
+        panel.add(addRowButton, BorderLayout.WEST);
 
         // frame (window) settings
         frame.add(panel, BorderLayout.CENTER);
@@ -84,9 +93,42 @@ public class JFrameGUI {
         }
     }
 
+    private void saveChangesToDatabase() {
+        // count rows
+        int rowCount = table.getRowCount();
+        // save each row
+        for (int i = 0; i < rowCount; i++) {
+            int id = (int) table.getValueAt(i, 0);
+            String givenName = (String) table.getValueAt(i, 1);
+            String surname = (String) table.getValueAt(i, 2);
+            String phoneNumber = (String) table.getValueAt(i, 3);
+    
+            // query database
+            AlterDatabase.updateContact(id, givenName, surname, phoneNumber);
+        }
+    }
+
+    private void addNewRow() {
+        // get the number of columns
+        int columnCount = tableModel.getColumnCount();
+        int rowCount = tableModel.getRowCount();
+
+        // create an array to hold default values for the new row
+        Object[] newRowData = new Object[columnCount];
+
+        // add default values to the array
+        newRowData[0] = rowCount + 1; 
+        for (int i = 1; i < columnCount; i++) {
+            newRowData[i] = "New Value";
+        }
+
+        // add the new row to the table model
+        tableModel.addRow(newRowData);
+    }
+
     public static void main(String[] args) {
         // setting up db connection
-        if (DBConnection.dbConnection() == null) {
+        if (DatabaseSetup.dbConnection() == null) {
             System.exit(0);
         } else {
             // exec function build list from objects

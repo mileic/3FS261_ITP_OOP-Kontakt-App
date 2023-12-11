@@ -1,8 +1,9 @@
+// import modules & librarys
 import java.sql.*;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 
-public class DBConnection {
+public class DatabaseSetup {
     public static Connection dbConnection() {
         // ensure conn is null
         Connection dbConn = null;

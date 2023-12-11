@@ -13,6 +13,17 @@ public class Contacts {
         this.phoneNumber = phoneNumber;
     }
 
+    // set methods
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     // get methods
     public int getId() {
         return id;
