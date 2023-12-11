@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.Properties;
-import java.awt.EventQueue;
 import javax.swing.JOptionPane;
 
 public class DBConnection {
@@ -15,7 +14,7 @@ public class DBConnection {
             dbProp.put("user", "root");
             dbProp.put("password", "K1nG$m3N*");
 
-            // try to connect to database with JBDC driver. 
+            // try to connect to database with JBDC driver.
             Class.forName("com.mysql.cj.jdbc.Driver");
             dbConn = DriverManager.getConnection(url, dbProp);
 
@@ -35,13 +34,5 @@ public class DBConnection {
             
             return null;
         }
-    }
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                // init connection
-                DBConnection.dbConnection();
-            }
-        });
     }
 }

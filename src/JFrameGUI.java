@@ -85,13 +85,18 @@ public class JFrameGUI {
     }
 
     public static void main(String[] args) {
-        // exec function build list from objects
-        List<Contacts> dataList = createDataList();
-        
-        // build application
-        SwingUtilities.invokeLater(() -> {
-            new JFrameGUI(dataList);
-        });
+        // setting up db connection
+        if (DBConnection.dbConnection() == null) {
+            System.exit(0);
+        } else {
+            // exec function build list from objects
+            List<Contacts> dataList = createDataList();
+
+            // build application
+            SwingUtilities.invokeLater(() -> {
+                new JFrameGUI(dataList);
+            });
+        }
     }
 
     public static List<Contacts> createDataList() {
