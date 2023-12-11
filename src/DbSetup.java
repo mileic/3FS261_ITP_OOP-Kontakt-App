@@ -22,9 +22,9 @@ public class DbSetup {
 
             // return connection obj
             return dbConn;
-        } catch (SQLException sqlEx) {
+        } catch (ClassNotFoundException | SQLException ex) {
             // print failure status
-            sqlEx.printStackTrace();
+            ex.printStackTrace();
             
             // return nothing if connection cant be established
             return null;

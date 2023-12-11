@@ -105,7 +105,7 @@ public class JFrameGui {
             String phoneNumber = (String) table.getValueAt(i, 3);
     
             // query database
-            AlterDbData.updateContact(id, givenName, surname, phoneNumber);
+            //AlterDbData.updateContact(id, givenName, surname, phoneNumber);
         }
     }
 
