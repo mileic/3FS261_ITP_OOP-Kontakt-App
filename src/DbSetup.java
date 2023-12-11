@@ -1,9 +1,10 @@
 // import modules & librarys
 import java.sql.*;
 import java.util.Properties;
-import javax.swing.JOptionPane;
 
 public class DbSetup {
+    Connection dbConn;
+
     public static Connection dbConnection() {
         // ensure conn is null
         Connection dbConn = null;
@@ -19,20 +20,13 @@ public class DbSetup {
             Class.forName("com.mysql.cj.jdbc.Driver");
             dbConn = DriverManager.getConnection(url, dbProp);
 
-            if (dbConn != null) {
-                // show success status
-                JOptionPane.showMessageDialog(null, "Connected to the database.");
-            }
             // return connection obj
             return dbConn;
-        } catch (Exception ex) {
+        } catch (SQLException sqlEx) {
             // print failure status
-            System.out.println(ex);
-
-            String errOut = "Connection to database failed.\n\n" + ex;
-            // show failure status
-            JOptionPane.showMessageDialog(null, errOut);
+            sqlEx.printStackTrace();
             
+            // return nothing if connection cant be established
             return null;
         }
     }

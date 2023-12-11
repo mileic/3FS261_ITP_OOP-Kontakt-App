@@ -6,6 +6,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import java.sql.SQLException;
 
 public class JFrameGui {
     // initialize vars
@@ -128,16 +129,20 @@ public class JFrameGui {
 
     public static void main(String[] args) {
         // setting up db connection
-        if (DbSetup.dbConnection() == null) {
-            System.exit(0);
-        } else {
-            // exec function build list from objects
-            List<Contacts> dataList = AlterDbData.;
+        if (DbSetup.dbConnection() != null) {
+            // show success status
+            JOptionPane.showMessageDialog(null, "Connected to the database.");
 
             // build application
             SwingUtilities.invokeLater(() -> {
-                new JFrameGui();
+                new JFrameGui(AlterDbData.getAllContactsFromDb());
             });
+        } else {
+            // show failure status
+            JOptionPane.showMessageDialog(null, "Can't establish connection to database.");
+
+            // exit sys
+            System.exit(0);
         }
     }
 
