@@ -25,7 +25,7 @@ public class DbSetup {
         } catch (ClassNotFoundException | SQLException ex) {
             // print failure status
             ex.printStackTrace();
-            
+
             // return nothing if connection cant be established
             return null;
         }

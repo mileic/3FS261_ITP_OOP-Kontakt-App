@@ -1,12 +1,12 @@
 // import modules & librarys
 import java.util.List;
-import java.awt.*;
+import java.awt.BorderLayout;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JFrameGui {
     // initialize vars
@@ -17,6 +17,9 @@ public class JFrameGui {
     private JScrollPane scrollPane;
     private NonEditableIdTableModel tableModel;
 
+    // setting up db connection
+    static Connection dbConn = DbSetup.dbConnection();
+
     public JFrameGui(List<Contacts> data) {
         // create frame
         frame = new JFrame();
@@ -24,13 +27,13 @@ public class JFrameGui {
         // configure table model
         String[] columnNames = {"ID", "Name", "Surname", "Phone Number"};
         tableModel = new NonEditableIdTableModel(columnNames, 0);
-        
+
         // filling table with content from objects
         for (Contacts obj : data) {
             Object[] rowData = {obj.getId(), obj.getGivenName(), obj.getSurname(), obj.getPhoneNumber()};
             tableModel.addRow(rowData);
         }
-        
+
         // create table, panel and scroll pane
         table = new JTable(tableModel);
         scrollPane = new JScrollPane(table);
@@ -65,7 +68,7 @@ public class JFrameGui {
 
         // panel settings
         panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-        
+
         // add components to panel
         panel.add(searchField, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -99,13 +102,12 @@ public class JFrameGui {
         int rowCount = table.getRowCount();
         // save each row
         for (int i = 0; i < rowCount; i++) {
-            int id = (int) table.getValueAt(i, 0);
             String givenName = (String) table.getValueAt(i, 1);
             String surname = (String) table.getValueAt(i, 2);
             String phoneNumber = (String) table.getValueAt(i, 3);
-    
+
             // query database
-            //AlterDbData.updateContact(id, givenName, surname, phoneNumber);
+            AlterDbData.setContacts(dbConn, givenName, surname, phoneNumber);
         }
     }
 
@@ -118,9 +120,9 @@ public class JFrameGui {
         Object[] newRowData = new Object[columnCount];
 
         // add default values to the array
-        newRowData[0] = rowCount + 1; 
+        newRowData[0] = rowCount + 1;
         for (int i = 1; i < columnCount; i++) {
-            newRowData[i] = "Null";
+            newRowData[i] = "Edit";
         }
 
         // add the new row to the table model
@@ -128,14 +130,13 @@ public class JFrameGui {
     }
 
     public static void main(String[] args) {
-        // setting up db connection
-        if (DbSetup.dbConnection() != null) {
+        if (dbConn != null) {
             // show success status
             JOptionPane.showMessageDialog(null, "Connected to the database.");
 
             // build application
             SwingUtilities.invokeLater(() -> {
-                new JFrameGui(AlterDbData.getAllContactsFromDb());
+                new JFrameGui(AlterDbData.fetchContacts(dbConn));
             });
         } else {
             // show failure status
@@ -144,12 +145,5 @@ public class JFrameGui {
             // exit sys
             System.exit(0);
         }
-    }
-
-    public static List<Contacts> createDataList() {
-        return List.of(
-            new Contacts(1,  "Michael", "Leichtl", "Null"),
-            new Contacts(2,  "Max", "Schwaderer", "Null")
-        );
     }
 }
