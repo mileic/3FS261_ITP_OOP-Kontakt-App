@@ -68,4 +68,19 @@ public class AlterDbData {
             sqlEx.printStackTrace(); // catch sql exception
         }
     }
+
+    public void removeContact(Connection dbConn, int id) {
+        // create query
+        String removeSql = "DELETE FROM Contacts WHERE id = ?";
+
+        try {
+            PreparedStatement delStatement = dbConn.prepareStatement(removeSql);
+            String sId = Integer.toString(id);
+            delStatement.setString(1, sId);
+            delStatement.executeUpdate();
+            delStatement.close();
+        } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace(); // catch sql exception
+        }
+    }
 }
