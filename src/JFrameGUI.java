@@ -213,6 +213,10 @@ public class JFrameGui {
                 // remove row if selected -1 = none -> remove from gui
                 tableModel.removeRow(selectedRow);
             }
+            JOptionPane.showMessageDialog(frame,
+                "Contact successfully removed.",
+                "Data Removed",
+                JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(frame,
                 "Please select a row to remove.",
