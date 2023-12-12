@@ -1,6 +1,7 @@
 // import modules & librarys
 import java.util.List;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -12,7 +13,10 @@ import java.sql.*;
 public class JFrameGui {
     // initialize vars
     private JFrame frame;
-    private JPanel panel;
+    private JPanel mainPanel;
+    private JPanel tablePanel;
+    private JPanel buttonPanel;
+
     private JTable table;
     private JTextField searchField;
     private JScrollPane scrollPane;
@@ -25,6 +29,27 @@ public class JFrameGui {
         // create frame
         frame = new JFrame();
 
+        // create main panel
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+
+        // create and build the table and button panel using own methods
+        confTablePanel(data);
+        confButtonPanel();
+
+        // add components to main panel
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // frame (window) settings
+        frame.add(mainPanel, BorderLayout.CENTER);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Contacts");
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private void confTablePanel(List<Contacts> data) {
         // configure table model
         String[] columnNames = {"ID", "Name", "Surname", "Phone Number"};
         tableModel = new NonEditableIdTableModel(columnNames, 0);
@@ -37,9 +62,12 @@ public class JFrameGui {
 
         // create table, panel and scroll pane
         table = new JTable(tableModel);
+        table.setFillsViewportHeight(true);
         scrollPane = new JScrollPane(table);
-        panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
+        // create the table panel
+        tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
 
         // create search text field
         searchField = new JTextField();
@@ -60,28 +88,33 @@ public class JFrameGui {
             }
         });
 
-        // create save & add new row button
+        // add components to table panel
+        tablePanel.add(searchField, BorderLayout.NORTH);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void confButtonPanel() {
+        // create the button panel
+        buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
+
+        // create buttons
         JButton saveButton = new JButton("Save");
+        JButton loadButton = new JButton("Load");
         JButton addRowButton = new JButton("Add New Row");
-        // handle event listener
+        JButton removeRowButton = new JButton("Remove Selected Row");
+
+        // add action listeners
         saveButton.addActionListener(e -> saveChangesToDatabase());
+        loadButton.addActionListener(e -> loadFromDatabase());
         addRowButton.addActionListener(e -> addNewRow());
+        removeRowButton.addActionListener(e -> removeSelectedRow());
 
-        // panel settings
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 30, 15, 30));
-
-        // add components to panel
-        panel.add(searchField, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(saveButton, BorderLayout.SOUTH);
-        panel.add(addRowButton, BorderLayout.SOUTH);
-
-        // frame (window) settings
-        frame.add(panel, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Contacts");
-        frame.pack();
-        frame.setVisible(true);
+        // add buttons to the button panel
+        buttonPanel.add(saveButton);
+        buttonPanel.add(loadButton);
+        buttonPanel.add(addRowButton);
+        buttonPanel.add(removeRowButton);
     }
 
     private void filterTable() {
@@ -121,6 +154,13 @@ public class JFrameGui {
         }
     }
 
+    private void loadFromDatabase() {
+        AlterDbData.fetchContacts(dbConn);
+
+        // notifies tableModel about change of data -> refresh
+        tableModel.fireTableDataChanged();
+    }
+
     private void addNewRow() {
         // get the number of columns
         int columnCount = tableModel.getColumnCount();
@@ -137,6 +177,30 @@ public class JFrameGui {
 
         // add the new row to the table model
         tableModel.addRow(newRowData);
+    }
+
+    private void removeSelectedRow() {
+        // get by cursor selected row
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            // ask for confirmation
+            int confirmation = JOptionPane.showConfirmDialog(frame,
+                "Do you want to remove the selected row?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
+
+            // if user confirms remove row from gui and db
+            if (confirmation == JOptionPane.YES_OPTION) {
+                // remove row if selected -1 = none
+                tableModel.removeRow(selectedRow);
+
+                // get id for selected row
+                String id = (String) table.getValueAt(selectedRow, 0);
+
+                // query database
+                AlterDbData.removeContact(dbConn, id);
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "Please select a row to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {

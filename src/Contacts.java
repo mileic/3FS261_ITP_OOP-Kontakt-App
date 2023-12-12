@@ -4,7 +4,7 @@ public class Contacts {
     private String givenName;
     private String surname;
     private String phoneNumber;
-    
+
     // constructor class
     public Contacts(int id, String givenName, String surname, String phoneNumber) {
         this.id = id;
