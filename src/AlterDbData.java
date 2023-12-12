@@ -43,6 +43,7 @@ public class AlterDbData {
             preparedStatement.setString(1, givenName);
             preparedStatement.setString(2, surname);
             preparedStatement.setString(3, phoneNumber);
+
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
                     // eintrag wird erstellt
