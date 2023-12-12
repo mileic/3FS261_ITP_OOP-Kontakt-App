@@ -152,6 +152,12 @@ public class JFrameGui {
             // query database
             AlterDbData.setContacts(dbConn, givenName, surname, phoneNumber);
         }
+
+        // show success status
+        JOptionPane.showMessageDialog(frame,
+            "Data saved into local database.",
+            "Data Saved",
+            JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void loadFromDatabase() {
@@ -159,6 +165,12 @@ public class JFrameGui {
 
         // notifies tableModel about change of data -> refresh
         tableModel.fireTableDataChanged();
+
+        // show success status
+        JOptionPane.showMessageDialog(frame,
+            "Data successfully fetched from local database.",
+            "Data Fetched",
+            JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void addNewRow() {
@@ -182,31 +194,40 @@ public class JFrameGui {
     private void removeSelectedRow() {
         // get by cursor selected row
         int selectedRow = table.getSelectedRow();
+
         if (selectedRow != -1) {
             // ask for confirmation
             int confirmation = JOptionPane.showConfirmDialog(frame,
-                "Do you want to remove the selected row?", "Confirm Removal", JOptionPane.YES_NO_OPTION);
+                "Do you want to remove the selected row?",
+                "Confirm Removal",
+                JOptionPane.YES_NO_OPTION);
 
             // if user confirms remove row from gui and db
             if (confirmation == JOptionPane.YES_OPTION) {
-                // remove row if selected -1 = none
-                tableModel.removeRow(selectedRow);
-
                 // get id for selected row
-                String id = (String) table.getValueAt(selectedRow, 0);
+                int id = (int) table.getValueAt(selectedRow, 0);
 
-                // query database
+                // query database -> remove from db
                 AlterDbData.removeContact(dbConn, id);
+
+                // remove row if selected -1 = none -> remove from gui
+                tableModel.removeRow(selectedRow);
             }
         } else {
-            JOptionPane.showMessageDialog(frame, "Please select a row to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame,
+                "Please select a row to remove.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public static void main(String[] args) {
         if (dbConn != null) {
             // show success status
-            JOptionPane.showMessageDialog(null, "Connected to the database.");
+            JOptionPane.showMessageDialog(null,
+                "Connected to the database.",
+                "Connected",
+                JOptionPane.INFORMATION_MESSAGE);
 
             // build application
             SwingUtilities.invokeLater(() -> {
@@ -214,7 +235,10 @@ public class JFrameGui {
             });
         } else {
             // show failure status
-            JOptionPane.showMessageDialog(null, "Can't establish connection to database.");
+            JOptionPane.showMessageDialog(null,
+                "Can't establish connection to database.",
+                "Connection Failure",
+                JOptionPane.INFORMATION_MESSAGE);
 
             // exit sys
             System.exit(0);

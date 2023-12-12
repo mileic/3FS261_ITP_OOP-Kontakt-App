@@ -46,7 +46,7 @@ public class AlterDbData {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (!resultSet.next()) {
-                    // eintrag wird erstellt
+                    // prepare sql statement
                     String insertSql = "INSERT INTO Contacts (givenName, surname, phoneNumber) VALUES (?, ?, ?)";
                     PreparedStatement insertStatement = dbConn.prepareStatement(insertSql);
                     // replace params for each index
@@ -61,7 +61,7 @@ public class AlterDbData {
                         System.out.println("Fehler beim Erstellen des Eintrags.");
                     }
 
-                    // Ressourcen schließen
+                    // close ressources
                     insertStatement.close();
                 }
             }
@@ -70,15 +70,22 @@ public class AlterDbData {
         }
     }
 
-    public void removeContact(Connection dbConn, int id) {
+    public static void removeContact(Connection dbConn, int id) {
         // create query
         String removeSql = "DELETE FROM Contacts WHERE id = ?";
 
         try {
+            // prepare sql statement
             PreparedStatement delStatement = dbConn.prepareStatement(removeSql);
+
+            // convert id to string for sql query
             String sId = Integer.toString(id);
+
+            // replace params for first index (id)
             delStatement.setString(1, sId);
             delStatement.executeUpdate();
+
+            // close ressources
             delStatement.close();
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace(); // catch sql exception
