@@ -1,8 +1,11 @@
 // import modules & librarys
 import java.util.List;
+import java.util.Objects;
 import java.sql.Connection;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.event.DocumentEvent;
@@ -37,9 +40,33 @@ public class JFrameGui {
         mainPanel.add(tablePanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
+        // window listener to detect closing event
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // check for unsaved changes
+                if (hasUnsavedChanges()) {
+                    // ask for confirmation
+                    int confirmation = JOptionPane.showConfirmDialog(frame,
+                            "You have unsaved changes. Do you want to exit?",
+                            "Confirm Exit",
+                            JOptionPane.YES_NO_OPTION);
+
+                    // after confirmation -> close the application
+                    if (confirmation == JOptionPane.YES_OPTION) {
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    } else {
+                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                    }
+                } else {
+                    // if there are no unsaved changes close by default
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
+            }
+        });
+
         // frame (window) settings
         frame.add(mainPanel, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Contacts");
         frame.pack();
         frame.setVisible(true);
@@ -128,6 +155,38 @@ public class JFrameGui {
         }
     }
 
+    private boolean hasUnsavedChanges() {
+        int rowCount = tableModel.getRowCount();
+        int columnCount = tableModel.getColumnCount();
+
+        List<Contacts> contactsList = AlterDbData.fetchContacts(dbConn);
+
+        if (rowCount != contactsList.size()) {
+            // if the row count differs return true
+            System.out.println("Row exception");
+            System.out.println(rowCount);
+            System.out.println(contactsList.size());
+            return true;
+        }
+
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columnCount; j++) {
+                Object tableValue = table.getValueAt(i, j);
+                Object dbValue = contactsList.get(i).getStoredVariables()[j];
+
+                System.out.println(tableValue);
+                System.out.println(dbValue);
+
+                // compare both objects
+                if (!Objects.equals(tableValue, dbValue)) {
+                    // if cells are not equal return true
+                    return true;
+                }
+            }
+        }
+        return false; // no differences found
+    }
+
     private void saveChangesToDatabase() {
         // stop cell editing to ensure changes are committed
         if (table.isEditing()) {
@@ -142,12 +201,16 @@ public class JFrameGui {
         int rowCount = table.getRowCount();
         // save each row
         for (int i = 0; i < rowCount; i++) {
+            int id = (int) table.getValueAt(i, 0);
             String givenName = (String) table.getValueAt(i, 1);
             String surname = (String) table.getValueAt(i, 2);
             String phoneNumber = (String) table.getValueAt(i, 3);
 
+            System.out.println(id + givenName + surname + phoneNumber);
+            // convert to string -> returns string representation of obj
+            String idStr = String.valueOf(id);
             // query database
-            AlterDbData.setContacts(dbConn, givenName, surname, phoneNumber);
+            AlterDbData.alterContacts(dbConn, idStr, givenName, surname, phoneNumber);
         }
 
         // show success status
@@ -176,12 +239,18 @@ public class JFrameGui {
     private void addNewRow() {
         // get the number of columns
         int columnCount = tableModel.getColumnCount();
+        int rowCount = tableModel.getRowCount();
+        int idFromTable = (int) table.getValueAt(rowCount -1, 0);
 
         // create an array to hold default values for the new row
         Object[] newRowData = new Object[columnCount];
 
         // add default values to the array
-        newRowData[0] = AlterDbData.getMaxIdFromDatabase(dbConn) + 1;
+        if (idFromTable > AlterDbData.getMaxIdFromDatabase(dbConn)) {
+            newRowData[0] = idFromTable +1;
+        } else {
+            newRowData[0] = AlterDbData.getMaxIdFromDatabase(dbConn) +1;
+        }
         for (int i = 1; i < columnCount; i++) {
             newRowData[i] = "Edit";
         }

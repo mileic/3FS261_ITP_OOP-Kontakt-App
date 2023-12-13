@@ -26,4 +26,13 @@ public class Contacts {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public Object[] getStoredVariables() {
+        Object[] storedVariables = new Object[4];
+        storedVariables[0] = id;
+        storedVariables[1] = givenName;
+        storedVariables[2] = surname;
+        storedVariables[3] = phoneNumber;
+        return storedVariables;
+    }
 }
