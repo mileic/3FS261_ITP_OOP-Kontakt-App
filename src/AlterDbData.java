@@ -10,7 +10,7 @@ public class AlterDbData {
         List<Contacts> contactsList = new ArrayList<>();
 
         // prepare query statement
-        String query = "SELECT id, givenName, surname, phoneNumber FROM Contacts";
+        String query = "SELECT id, givenName, surname, phoneNumber FROM Contacts ORDER BY id ASC";
 
         try (PreparedStatement preparedStatement = dbConn.prepareStatement(query)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -30,6 +30,25 @@ public class AlterDbData {
             sqlEx.printStackTrace(); // catch sql exception
         }
         return contactsList;
+    }
+
+    // method to get the maximum id
+    public static int getMaxIdFromDatabase(Connection dbConn) {
+        int maxId = -1; // returns null if no entries are found
+
+        try {
+            String query = "SELECT MAX(id) FROM Contacts";
+            try (PreparedStatement preparedStatement = dbConn.prepareStatement(query);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // get the maximum id from the result set
+                    maxId = resultSet.getInt(1);
+                }
+            }
+        } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace(); // Handle the exception appropriately
+        }
+        return maxId;
     }
 
     // method to update the database by newly written rows
@@ -72,11 +91,11 @@ public class AlterDbData {
 
     public static void removeContact(Connection dbConn, int id) {
         // create query
-        String removeSql = "DELETE FROM Contacts WHERE id = ?";
+        String query = "DELETE FROM Contacts WHERE id = ?";
 
         try {
             // prepare sql statement
-            PreparedStatement delStatement = dbConn.prepareStatement(removeSql);
+            PreparedStatement delStatement = dbConn.prepareStatement(query);
 
             // convert id to string for sql query
             String sId = Integer.toString(id);

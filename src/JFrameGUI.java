@@ -1,25 +1,21 @@
 // import modules & librarys
 import java.util.List;
+import java.sql.Connection;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableRowSorter;
-import java.sql.*;
 
 public class JFrameGui {
-    // initialize vars
+    // initialize vars that are globally used
     private JFrame frame;
     private JPanel mainPanel;
     private JPanel tablePanel;
     private JPanel buttonPanel;
-
     private JTable table;
     private JTextField searchField;
-    private JScrollPane scrollPane;
     private NonEditableIdTableModel tableModel;
 
     // setting up db connection
@@ -61,9 +57,10 @@ public class JFrameGui {
         }
 
         // create table, panel and scroll pane
-        table = new JTable(tableModel);
+        table = new JTable();
+        table.setModel(tableModel);
         table.setFillsViewportHeight(true);
-        scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(table);
 
         // create the table panel
         tablePanel = new JPanel(new BorderLayout());
@@ -164,7 +161,10 @@ public class JFrameGui {
         AlterDbData.fetchContacts(dbConn);
 
         // notifies tableModel about change of data -> refresh
-        tableModel.fireTableDataChanged();
+        SwingUtilities.invokeLater(() -> {
+            tableModel.fireTableDataChanged();
+            table.repaint();
+        });
 
         // show success status
         JOptionPane.showMessageDialog(frame,
@@ -176,13 +176,12 @@ public class JFrameGui {
     private void addNewRow() {
         // get the number of columns
         int columnCount = tableModel.getColumnCount();
-        int rowCount = tableModel.getRowCount();
 
         // create an array to hold default values for the new row
         Object[] newRowData = new Object[columnCount];
 
         // add default values to the array
-        newRowData[0] = rowCount + 1;
+        newRowData[0] = AlterDbData.getMaxIdFromDatabase(dbConn) + 1;
         for (int i = 1; i < columnCount; i++) {
             newRowData[i] = "Edit";
         }
@@ -209,14 +208,14 @@ public class JFrameGui {
 
                 // query database -> remove from db
                 AlterDbData.removeContact(dbConn, id);
+                tableModel.removeRow(selectedRow); // if selected -1 = none -> remove from gui
 
-                // remove row if selected -1 = none -> remove from gui
-                tableModel.removeRow(selectedRow);
-            }
-            JOptionPane.showMessageDialog(frame,
+                // show success message
+                JOptionPane.showMessageDialog(frame,
                 "Contact successfully removed.",
                 "Data Removed",
                 JOptionPane.INFORMATION_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(frame,
                 "Please select a row to remove.",
