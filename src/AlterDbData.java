@@ -60,7 +60,6 @@ public class AlterDbData {
             PreparedStatement statement = dbConn.prepareStatement(query);
             statement.setString(1, id);
 
-            System.out.println(statement);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (!resultSet.next()) {
                     createContact(dbConn, givenName, surname, phoneNumber);
@@ -84,13 +83,7 @@ public class AlterDbData {
             statement.setString(3, phoneNumber);
 
             // execute update
-            int affectedRows = statement.executeUpdate();
-
-            if (affectedRows > 0) {
-                System.out.println("Neuer Eintrag wurde erstellt.");
-            } else {
-                System.out.println("Fehler beim Erstellen des Eintrags.");
-            }
+            statement.executeUpdate();
 
             // close ressources
             statement.close();
@@ -111,13 +104,7 @@ public class AlterDbData {
             statement.setString(4, id);
 
             // execute update
-            int affectedRows = statement.executeUpdate();
-
-            if (affectedRows > 0) {
-                System.out.println("Contact updated successfully.");
-            } else {
-                System.out.println("No contact updated.");
-            }
+            statement.executeUpdate();
 
             // close ressources
             statement.close();

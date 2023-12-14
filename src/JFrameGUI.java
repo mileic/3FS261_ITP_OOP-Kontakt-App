@@ -163,9 +163,6 @@ public class JFrameGui {
 
         if (rowCount != contactsList.size()) {
             // if the row count differs return true
-            System.out.println("Row exception");
-            System.out.println(rowCount);
-            System.out.println(contactsList.size());
             return true;
         }
 
@@ -173,9 +170,6 @@ public class JFrameGui {
             for (int j = 0; j < columnCount; j++) {
                 Object tableValue = table.getValueAt(i, j);
                 Object dbValue = contactsList.get(i).getStoredVariables()[j];
-
-                System.out.println(tableValue);
-                System.out.println(dbValue);
 
                 // compare both objects
                 if (!Objects.equals(tableValue, dbValue)) {
@@ -206,7 +200,6 @@ public class JFrameGui {
             String surname = (String) table.getValueAt(i, 2);
             String phoneNumber = (String) table.getValueAt(i, 3);
 
-            System.out.println(id + givenName + surname + phoneNumber);
             // convert to string -> returns string representation of obj
             String idStr = String.valueOf(id);
             // query database
