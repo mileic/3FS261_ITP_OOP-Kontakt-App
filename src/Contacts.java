@@ -1,11 +1,11 @@
 public class Contacts {
-    // initiate variables
+    // Variablen Deklaration
     private int id;
     private String givenName;
     private String surname;
     private String phoneNumber;
 
-    // constructor class
+    // Set Methode
     public Contacts(int id, String givenName, String surname, String phoneNumber) {
         this.id = id;
         this.givenName = givenName;
@@ -13,7 +13,7 @@ public class Contacts {
         this.phoneNumber = phoneNumber;
     }
 
-    // get methods
+    // Get Methoden
     public int getId() {
         return id;
     }
