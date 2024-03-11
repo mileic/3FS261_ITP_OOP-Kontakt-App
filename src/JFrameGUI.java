@@ -49,7 +49,7 @@ public class JFrameGui {
                     // ask for confirmation
                     int confirmation = JOptionPane.showConfirmDialog(frame,
                             "You have unsaved changes. Do you want to exit?",
-                            "Confirm Exit",
+                            "Discard Changes",
                             JOptionPane.YES_NO_OPTION);
 
                     // after confirmation -> close the application
