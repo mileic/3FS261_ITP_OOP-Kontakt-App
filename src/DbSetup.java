@@ -13,8 +13,8 @@ public class DbSetup {
             // declare variables
             String url = "jdbc:mysql://localhost:3306/ContactsDB";
             Properties dbProp = new Properties();
-            dbProp.put("user", "root");
-            dbProp.put("password", "K1nG$m3N*");
+            dbProp.put("user", "root"); // username "root" is just a placeholder
+            dbProp.put("password", "K1nG$m3N*"); // password "K1nG$m3N*" is just a placeholder
 
             // try to connect to database with JBDC driver.
             Class.forName("com.mysql.cj.jdbc.Driver");
