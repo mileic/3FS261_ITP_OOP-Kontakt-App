@@ -56,6 +56,4 @@ Bevor Sie die Anwendung ausführen können, stellen Sie bitte sicher, dass Sie d
 
 Diese Anwendung wurde entwickelt von Max Schwaderer & Michael Leichtl.
 
-Für Fragen oder Anregungen können Sie mich unter mileic@icloud.com kontaktieren.
-
 © 2024 Max Schwaderer & Michael Leichtl
